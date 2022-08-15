@@ -1,32 +1,546 @@
-# Prerequisites
-*.d
+#include <iostream> 
+#include <fstream> 
+#include <conio.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+class num
+{
+public:
+    char charznach;
+    int znach;
+    vector <int> maybe;
+};
+int proverkasym(vector<vector<num>> maybenum);
+void fromfile(vector<vector<num>>& maybenum, const char* way);
+void setregion(vector<vector<num>>& maybenum, vector<int> region, int starti, int startj, int endi, int endj);
+void nochanse(vector<vector<num>>& maybenum);
+void tablica(vector<vector<num>> maybenum)
+{
+    int q = 0, w = 0;
+    cout << (char)201;
+    for (int i = 0; i < 18; i++)
+    {
+        if (i % 2 == 0 && i > 1)
+            cout << (char)203;
+        cout << (char)205 << (char)205;
+    }
+    cout << (char)187 << endl;
+    for (int i = 0; i < 9; i++)
+    {
+        if (i == 8)
+        {
+            for (int i = 0; i < 19; i++)
+            {
+                if (i % 2 == 0)
+                    cout << (char)186;
+                else
+                {
+                    if (maybenum[q][w].znach > 9)
+                    {
+                        cout << " " << maybenum[q][w].znach << " ";
+                        w++;
+                    }
+                    else
+                    {
+                        cout << "  " << maybenum[q][w].znach << " ";
+                        w++;
+                    }
+                }
+            }
+            cout << endl;
+            cout << (char)200;
+            for (int i = 0; i < 18; i++)
+            {
+                if (i % 2 == 0 && i > 1)
+                    cout << (char)202;
+                cout << (char)205 << (char)205;
+            }
+            cout << (char)188;
+            break;
+        }
+        for (int i = 0; i < 19; i++)
+        {
+            if (i % 2 == 0)
+                cout << (char)186;
+            else
+            {
+                if (maybenum[q][w].znach > 9)
+                {
+                    cout << " " << maybenum[q][w].znach << " ";
+                    w++;
+                    if (w == 9)
+                    {
+                        w = 0;
+                        q++;
+                    }
+                }
+                else
+                {
+                    cout << "  " << maybenum[q][w].znach << " ";
+                    w++;
+                    if (w == 9)
+                    {
+                        w = 0;
+                        q++;
+                    }
+                }
+            }
+        }
+        cout << endl << (char)204;
+        for (int i = 0; i < 18; i++)
+        {
+            if (i % 2 == 0 && i > 1)
+                cout << (char)206;
+            cout << (char)205 << (char)205;
+        }
+        cout << (char)185;
+        cout << endl;
+    }
+}
+void input(vector<vector<num>>& maybenum)
+{
+    int q = 0, w = 0;
+    cout << (char)201;
+    for (int i = 0; i < 18; i++)
+    {
+        if (i % 2 == 0 && i > 1)
+            cout << (char)203;
+        cout << (char)205 << (char)205;
+    }
+    cout << (char)187 << endl;
+    for (int i = 0; i < 9; i++)
+    {
+        if (i == 8)
+        {
+            for (int i = 0; i < 19; i++)
+            {
+                if (i % 2 == 0)
+                    cout << (char)186;
+                else
+                {
+                    maybenum[q][w].charznach = getch();
+                    if (maybenum[q][w].charznach-'0' > 9 || maybenum[q][w].charznach-'0' < 0)
+                    {
+                        system("cls");
+                        cout << "Numbers only from 1 to 9!!!\nTry one more\n";                      
+                        input(maybenum);
+                        return;
+                    }
+                    cout << "  " << maybenum[q][w].charznach << " ";
+                    w++;
+                }
+            }
+            cout << endl;
+            cout << (char)200;
+            for (int i = 0; i < 18; i++)
+            {
+                if (i % 2 == 0 && i > 1)
+                    cout << (char)202;
+                cout << (char)205 << (char)205;
+            }
+            cout << (char)188;
+            break;
+        }
+        for (int i = 0; i < 19; i++)
+        {
+            if (i % 2 == 0)
+                cout << (char)186;
+            else
+            {
+                maybenum[q][w].charznach = getch();
+                if (maybenum[q][w].charznach - '0' > 9 || maybenum[q][w].charznach - '0' < 0)
+                {
+                    system("cls");
+                    cout << "Numbers only from 1 to 9!!!\nTry one more\n";
+                    input(maybenum);
+                    return;
+                }
+                cout << "  " << maybenum[q][w].charznach << " ";
+                w++;
+                if (w == 9)
+                {
+                    w = 0;
+                    q++;
+                }
+            }
+        }
+        cout << endl << (char)204;
+        for (int i = 0; i < 18; i++)
+        {
+            if (i % 2 == 0 && i > 1)
+                cout << (char)206;
+            cout << (char)205 << (char)205;
+        }
+        cout << (char)185;
+        cout << endl;
+    }
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            maybenum[i][j].znach = maybenum[i][j].charznach - '0';
+}
+bool vertikal(vector<vector<num>>& maybenum, int k, int i)
+{
+    for (int j = 0; j < 9; j++)
+        if (maybenum[i][j].znach == k)
+            return false;
+    return true;
+}
+bool gorizontal(vector<vector<num>>& maybenum, int k, int j)
+{
+    for (int i = 0; i < 9; i++)
+        if (maybenum[i][j].znach == k)
+            return false;
+    return true;
+}
+bool kvadrat(vector<vector<num>>& maybenum, int k, int i, int j)
+{
+    int starti = 0, endi = 0, startj = 0, endj = 0;
+    if (i <= 2)
+    {
+        starti = 0;
+        endi = 3;
+    }
+    else if (i <= 5)
+    {
+        starti = 3;
+        endi = 6;
+    }
+    else if (i <= 8)
+    {
+        starti = 6;
+        endi = 9;
+    }
+    if (j <= 2)
+    {
+        startj = 0;
+        endj = 3;
+    }
+    else if (j <= 5)
+    {
+        startj = 3;
+        endj = 6;
+    }
+    else if (j <= 8)
+    {
+        startj = 6;
+        endj = 9;
+    }
+    for (int tmpi = starti; tmpi < endi; tmpi++)
+        for (int tmpj = startj; tmpj < endj; tmpj++)
+            if (maybenum[tmpi][tmpj].znach == k)
+                return false;
+    return true;
+}
+int proverkasym(vector<vector<num>> maybenum)
+{
+    int sum = 0;
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            sum += maybenum[i][j].znach;
+    return sum;
+}
+void checkmaybenum(vector<vector<num>>& maybenum)
+{
+    int k = 1;
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            if (maybenum[i][j].znach == 0)
+                for (int q = 0; q < 9; q++)
+                {
+                    if (k > 9)
+                        k = 1;
+                    if (gorizontal(maybenum, k, j) && kvadrat(maybenum, k, i, j) && vertikal(maybenum, k, i))
+                    {
+                        maybenum[i][j].maybe.push_back(k);
+                        k++;
+                    }
+                    else
+                        k++;
+                }
+}
+void onemaybenum(vector<vector<num>>& maybenum)
+{
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            if (maybenum[i][j].znach == 0 && maybenum[i][j].maybe.size() == 1)
+            {
+                maybenum[i][j].znach = maybenum[i][j].maybe[0];
+                maybenum[i][j].maybe.clear();
+            }
+}
+void twomaybenum(vector<vector<num>>& maybenum)
+{
+    int countzero = 0, checkcountzero = 0;
+    vector<int> region;
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            if (maybenum[i][j].znach == 0)
+            {
+                countzero++;
+                int starti = 0, endi = 0, startj = 0, endj = 0;
+                if (i <= 2)
+                {
+                    starti = 0;
+                    endi = 3;
+                }
+                else if (i <= 5)
+                {
+                    starti = 3;
+                    endi = 6;
+                }
+                else if (i <= 8)
+                {
+                    starti = 6;
+                    endi = 9;
+                }
+                if (j <= 2)
+                {
+                    startj = 0;
+                    endj = 3;
+                }
+                else if (j <= 5)
+                {
+                    startj = 3;
+                    endj = 6;
+                }
+                else if (j <= 8)
+                {
+                    startj = 6;
+                    endj = 9;
+                }
+                for (int tmpi = starti; tmpi < endi; tmpi++)
+                    for (int tmpj = startj; tmpj < endj; tmpj++)
+                        for (int q = 0; q < maybenum[tmpi][tmpj].maybe.size(); q++)
+                            region.push_back(maybenum[tmpi][tmpj].maybe[q]);
+                int maybe = 0;
+                for (int p = 0; p < region.size(); p++)
+                {
+                    int count = 0;
+                    for (int o = 0; o < region.size(); o++)
+                        if (p != o && region[p] == region[o])
+                            count++;
+                    if (!count)
+                        maybe = region[p];
+                }
+                if (maybe == 0)
+                {
+                    checkcountzero++;
+                    region.clear();
+                    continue;
+                }
+                else
+                {
+                    setregion(maybenum, region, starti, startj, endi, endj);
+                    region.clear();
+                    return;
+                }
+            }
+    if (checkcountzero == countzero)
+        nochanse(maybenum);
+}
+void nochanse(vector<vector<num>>& maybenum)
+{
+    vector<int> region;
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            if (maybenum[i][j].znach == 0)
+            {
+                int starti = 0, endi = 0, startj = 0, endj = 0;
+                if (i <= 2)
+                {
+                    starti = 0;
+                    endi = 3;
+                }
+                else if (i <= 5)
+                {
+                    starti = 3;
+                    endi = 6;
+                }
+                else if (i <= 8)
+                {
+                    starti = 6;
+                    endi = 9;
+                }
+                if (j <= 2)
+                {
+                    startj = 0;
+                    endj = 3;
+                }
+                else if (j <= 5)
+                {
+                    startj = 3;
+                    endj = 6;
+                }
+                else if (j <= 8)
+                {
+                    startj = 6;
+                    endj = 9;
+                }
+                for (int tmpi = starti; tmpi < endi; tmpi++)
+                    for (int tmpj = startj; tmpj < endj; tmpj++)
+                        for (int q = 0; q < maybenum[tmpi][tmpj].maybe.size(); q++)
+                            region.push_back(maybenum[tmpi][tmpj].maybe[q]);
+                if (region.size() == 4)
+                    for (int tmpii = starti; tmpii < endi; tmpii++)
+                        for (int tmpjj = startj; tmpjj < endj; tmpjj++)
+                            for (int qq = 0; qq < maybenum[tmpii][tmpjj].maybe.size(); qq++)
+                            {
+                                maybenum[tmpii][tmpjj].znach = maybenum[tmpii][tmpjj].maybe[qq];
+                                maybenum[tmpii][tmpjj].maybe.clear();
+                                return;
+                            }
+                if (region.size() == 8)
+                    for (int tmpii = starti; tmpii < endi; tmpii++)
+                        for (int tmpjj = startj; tmpjj < endj; tmpjj++)
+                            for (int qq = 0; qq < maybenum[tmpii][tmpjj].maybe.size(); qq++)
+                            {
+                                maybenum[tmpii][tmpjj].znach = maybenum[tmpii][tmpjj].maybe[qq];
+                                maybenum[tmpii][tmpjj].maybe.clear();
+                                return;
+                            }
+                region.clear();
+            }
+}
+void setregion(vector<vector<num>>& maybenum, vector<int> region, int starti, int startj, int endi, int endj)
+{
+    int maybe = 0;
+    for (int p = 0; p < region.size(); p++)
+    {
+        int count = 0;
+        for (int o = 0; o < region.size(); o++)
+            if (p != o && region[p] == region[o])
+                count++;
+        if (!count)
+            maybe = region[p];
+    }
+    if (maybe != 0)
+        for (int tmpi = starti; tmpi < endi; tmpi++)
+            for (int tmpj = startj; tmpj < endj; tmpj++)
+                for (int q = 0; q < maybenum[tmpi][tmpj].maybe.size(); q++)
+                    if (maybenum[tmpi][tmpj].maybe[q] == maybe)
+                    {
+                        maybenum[tmpi][tmpj].znach = maybe;
+                        maybenum[tmpi][tmpj].maybe.clear();
+                        return;
+                    }
+}
+void cleanmaybenum(vector<vector<num>>& maybenum)
+{
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            if (maybenum[i][j].znach == 0)
+                maybenum[i][j].maybe.clear();
+}
+void checkhowmanymaybe(vector<vector<num>>& maybenum)
+{
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            if (maybenum[i][j].maybe.size() == 1)
+            {
+                onemaybenum(maybenum);
+                return;
+            }
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
+            if (maybenum[i][j].maybe.size() > 1)
+            {
+                twomaybenum(maybenum);
+                return;
+            }
+}
+void sudoku(vector<vector<num>>& maybenum)
+{
+    do
+    {
+        checkmaybenum(maybenum);
+        checkhowmanymaybe(maybenum);
+        cleanmaybenum(maybenum);
+    
+    } while (proverkasym(maybenum) != 405);
+}
+int menu()
+{
+   // SetConsoleCP(1251);
+   // SetConsoleOutputCP(1251);
+  // setlocale(LC_ALL, "Russian");
+    int k;
+    cout << "1.Enter the sudoku table.\n";
+    cout << "2.Download the table from the file\n";
+    cout << "Demonstration of the program:\n";
+    cout << "3.Easy level.\n";
+    cout << "4.Middle level.\n";
+    cout << "5.Hard level.\n";
+    cin >> k;
+    return k;
+}
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+int main()
+{   
+    vector<vector<num>>maybenum(9, vector <num>(9));
+    switch (menu())
+    {
+    case 1:
+    {
+        input(maybenum);
+        system("pause");
+        system("cls");
+        tablica(maybenum);
+        sudoku(maybenum);
+        cout << "\nSudoku solved\n";
+        tablica(maybenum);
+    }break;
+    case 2:
+    {
+        fromfile(maybenum,"example.txt");
+        tablica(maybenum);
+        cout << proverkasym(maybenum);
+        sudoku(maybenum);
+        cout << "\nSudoku solved\n";
+        tablica(maybenum);
+        cout << proverkasym(maybenum);
+    }break;
+    case 3:
+    {
+        fromfile(maybenum, "easy.txt");
+        tablica(maybenum);
+        sudoku(maybenum);
+        cout << "\nSudoku solved\n";
+        tablica(maybenum);
+        cout << proverkasym(maybenum);
+    }break;
+    case 4:
+    {
+        fromfile(maybenum, "mid.txt");
+        tablica(maybenum);
+        sudoku(maybenum);
+        cout << "\nSudoku solved\n";
+        tablica(maybenum);
+        cout << proverkasym(maybenum);
+    }break;
+    case 5:
+    {
+        fromfile(maybenum, "hard.txt");
+        tablica(maybenum);
+        sudoku(maybenum);
+        cout << "\nSudoku solved\n";
+        tablica(maybenum);
+        cout << proverkasym(maybenum);
+    }break;
+    }
+    system("pause");
+}
+void fromfile(vector<vector<num>>& maybenum,const char* way)
+{
+    int a;
+    FILE* out;
+    if ((out = fopen(way,"r")) == NULL)
+        cout << "The file could not be created!";
+    else   
+        for (int i = 0; i < 9; i++)
+            for (int j = 0; j < 9; j++)
+            {
+                fscanf_s(out, "%i", &a);
+                maybenum[i][j].znach = a;
+            }
+}
